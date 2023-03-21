@@ -3,6 +3,7 @@ package com.codegym.model.product;
 
 
 public class PC {
+    
    private String cpu;
    private String mainboard;
    private String ram;

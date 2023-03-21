@@ -25,6 +25,17 @@ public class ProductService implements IProductService {
 
     @Override
     public Product findById(int id) {
-        return iProductRepository.findById(id).get();
+        return iProductRepository.findById(id).orElse(null);
+    }
+
+
+    @Override
+    public Page<Product> findByCategory(Pageable pageable, int id) {
+        return iProductRepository.findByCategory(pageable,id);
+    }
+
+    @Override
+    public Page<Product> findByCategoryAndName(Pageable pageable, int id, String name) {
+        return iProductRepository.findByCategoryAndName(pageable,id,name);
     }
 }

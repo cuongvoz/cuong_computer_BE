@@ -47,6 +47,7 @@ public class Product {
     private String aspectRatio;
     private String connector;
     private String panels;
+    private Boolean isDelete = false;
 
     @ManyToOne
     private Category category;
@@ -64,6 +65,14 @@ public class Product {
 
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public Boolean getDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(Boolean delete) {
+        isDelete = delete;
     }
 
     public void setQuantity(Integer quantity) {
