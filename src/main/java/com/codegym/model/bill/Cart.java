@@ -1,60 +1,50 @@
 package com.codegym.model.bill;
 
-public class Cart {
-    private int id;
-    private String name;
-    private String image;
-    private String price;
-    private String quantity;
+import com.codegym.model.product.Product;
+import com.codegym.model.user.User;
 
-    public int getId() {
+import javax.persistence.*;
+
+@Entity
+public class Cart {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @ManyToOne
+    private User user;
+    @ManyToOne
+    private Product product;
+    private Integer quantity;
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public User getUser() {
+        return user;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getImage() {
-        return image;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public String getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    @Override
-    public String toString() {
-        return "Cart{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", image='" + image + '\'' +
-                ", price='" + price + '\'' +
-                ", quantity='" + quantity + '\'' +
-                '}';
     }
 }

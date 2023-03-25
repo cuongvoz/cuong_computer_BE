@@ -15,6 +15,15 @@ public class BuyHistory {
     private Bill bill;
     private Integer quantity;
 
+    public BuyHistory() {
+    }
+
+    public BuyHistory(Product product, Bill bill, Integer quantity) {
+        this.product = product;
+        this.bill = bill;
+        this.quantity = quantity;
+    }
+
     public Integer getId() {
         return id;
     }

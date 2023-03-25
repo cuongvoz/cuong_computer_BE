@@ -11,6 +11,7 @@ public class Bill {
     private Integer id;
     private String buyDate;
     private Double totalPayment;
+    private Integer quantity;
     @ManyToOne
     private User user;
 
@@ -24,6 +25,14 @@ public class Bill {
 
     public String getBuyDate() {
         return buyDate;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public void setBuyDate(String buyDate) {

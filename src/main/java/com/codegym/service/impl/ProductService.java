@@ -38,4 +38,14 @@ public class ProductService implements IProductService {
     public Page<Product> findByCategoryAndName(Pageable pageable, int id, String name) {
         return iProductRepository.findByCategoryAndName(pageable,id,name);
     }
+
+    @Override
+    public void save(Product product) {
+        iProductRepository.save(product);
+    }
+
+    @Override
+    public Page<Product> hotProduct(Pageable pageable) {
+        return iProductRepository.hotProduct(pageable);
+    }
 }

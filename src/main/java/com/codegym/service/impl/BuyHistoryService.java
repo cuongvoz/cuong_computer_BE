@@ -20,16 +20,7 @@ public class BuyHistoryService implements IBuyHistoryService {
    @Autowired
     private IProductRepository iProductRepository;
     @Override
-    public void save(Cart[] cart, Bill bill) {
-        System.out.println(cart.length);
-        System.out.println(Arrays.toString(cart));
-
-        for (int i = 0; i < cart.length; i++) {
-            BuyHistory buyHistory = new BuyHistory();
-            buyHistory.setQuantity(Integer.parseInt(cart[i].getQuantity()));
-            buyHistory.setProduct(iProductRepository.findById(cart[i].getId()).get());
-            buyHistory.setBill(bill);
-            iBuyHistory.save(buyHistory);
-        }
+    public void save(BuyHistory buyHistory) {
+       iBuyHistory.save(buyHistory);
     }
 }

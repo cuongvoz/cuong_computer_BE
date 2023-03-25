@@ -13,6 +13,9 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
     @Query(value = "select * from product where name like %:name% and is_delete = false",nativeQuery = true)
     Page<Product> findAllByName(Pageable pageable,@Param("name") String name);
 
+    @Query(value = " select p.*  from `product` p join `buy_history` bh on p.id = bh.product_id where p.is_delete = false  group by p.id order by sum(p.id) desc",nativeQuery = true)
+    Page<Product> hotProduct(Pageable pageable);
+
     @Query(value = "select * from product where category_id = :id and is_delete =false",nativeQuery = true)
     Page<Product> findByCategory(Pageable pageable, @Param("id") int id);
     @Query(value = "select * from product where category_id = :id and is_delete =false and name like %:name%",nativeQuery = true)

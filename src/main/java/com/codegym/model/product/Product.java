@@ -17,7 +17,7 @@ public class Product {
     private String keyboard;
     private String connect;
     private String keycap;
-    private String Switch;
+    private String switchKey;
     private String reliability;
     private String compatible;
     private String cpu;
@@ -53,6 +53,96 @@ public class Product {
     private Category category;
 
     public Product() {
+    }
+
+    public Product(Integer id, String name, Double price, Double oldPrice, String image, String connect, String reliability, String compatible, String sensor, String DPI, String weight, String os, Category category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.oldPrice = oldPrice;
+        this.image = image;
+        this.connect = connect;
+        this.reliability = reliability;
+        this.compatible = compatible;
+        this.sensor = sensor;
+        this.DPI = DPI;
+        this.weight = weight;
+        this.os = os;
+        this.category = category;
+    }
+
+    public Product(Integer id, String name, Double price, Double oldPrice, String image, String screenSize, String resolution, String scanFrequency, String aspectRatio, String connector, String panels, Category category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.oldPrice = oldPrice;
+        this.image = image;
+        this.screenSize = screenSize;
+        this.resolution = resolution;
+        this.scanFrequency = scanFrequency;
+        this.aspectRatio = aspectRatio;
+        this.connector = connector;
+        this.panels = panels;
+        this.category = category;
+    }
+
+    public Product(String name, Double price, Double oldPrice, String image, String cpu, String ram, String vga, String hardDrive, String monitor, String pin, String color, String weight, String os, Category category) {
+        this.name = name;
+        this.price = price;
+        this.oldPrice = oldPrice;
+        this.image = image;
+        this.cpu = cpu;
+        this.ram = ram;
+        this.vga = vga;
+        this.hardDrive = hardDrive;
+        this.monitor = monitor;
+        this.pin = pin;
+        this.color = color;
+        this.weight = weight;
+        this.os = os;
+        this.category = category;
+    }
+
+    public Product(String name, Double price, Double oldPrice, String image, String keyboard, String connect, String keycap, String aswitchKey, String reliability, String compatible, Category category) {
+        this.name = name;
+        this.price = price;
+        this.oldPrice = oldPrice;
+        this.image = image;
+        this.keyboard = keyboard;
+        this.connect = connect;
+        this.keycap = keycap;
+        this.switchKey = aswitchKey;
+        this.reliability = reliability;
+        this.compatible = compatible;
+        this.category = category;
+    }
+
+    public Product(String name, Double price, Double oldPrice, String image, String material, String kneelings, String model, String brand, String backrest, Category category) {
+        this.name = name;
+        this.price = price;
+        this.oldPrice = oldPrice;
+        this.image = image;
+        this.material = material;
+        this.kneelings = kneelings;
+        this.brand = brand;
+        this.model = model;
+        this.backrest = backrest;
+        this.category = category;
+    }
+    public Product( String name, Double price, Double oldPrice, String image, String cpu, String mainboard, String ram, String ssd, String vga, String psu, String cases,Category category) {
+
+        this.name = name;
+        this.price = price;
+        this.oldPrice = oldPrice;
+        this.image = image;
+        this.cpu = cpu;
+        this.mainboard = mainboard;
+        this.ram = ram;
+        this.ssd = ssd;
+        this.vga = vga;
+        this.psu = psu;
+        this.cases = cases;
+        this.category = category;
     }
 
     public Integer getId() {
@@ -135,12 +225,12 @@ public class Product {
         this.keycap = keycap;
     }
 
-    public String getSwitch() {
-        return Switch;
+    public String getswitchKey() {
+        return switchKey;
     }
 
-    public void setSwitch(String aSwitch) {
-        Switch = aSwitch;
+    public void setswitchKey(String aswitchKey) {
+        switchKey = aswitchKey;
     }
 
     public String getReliability() {
