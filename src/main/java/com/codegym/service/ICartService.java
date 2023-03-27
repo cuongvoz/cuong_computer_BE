@@ -13,6 +13,7 @@ public interface ICartService {
     void deleteAllByUser(User user);
     Cart findById(Integer id);
     List<Cart> getAllByUser(User user);
-    Boolean existsByProduct(Product product);
+    Boolean existsByProductAndUser(Product product,User user);
     void deleteById(Integer id);
+    Cart findByProductAndUser(Product product,User user);
 }

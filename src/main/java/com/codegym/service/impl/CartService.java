@@ -23,8 +23,8 @@ public class CartService implements ICartService {
 
     @Override
     public void save(Cart cart) {
-        if (existsByProduct(cart.getProduct())) {
-            Cart cart1 = iCartRepository.findByProduct(cart.getProduct());
+        if (existsByProductAndUser(cart.getProduct(), cart.getUser())) {
+            Cart cart1 = iCartRepository.findByProductAndUser(cart.getProduct(),cart.getUser());
             int quantity = cart1.getQuantity();
             cart1.setQuantity(quantity+= 1);
             iCartRepository.save(cart1);
@@ -54,12 +54,17 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public Boolean existsByProduct(Product product) {
-        return iCartRepository.existsByProduct(product);
+    public Boolean existsByProductAndUser(Product product,User user) {
+        return iCartRepository.existsByProductAndUser(product,user);
     }
 
     @Override
     public void deleteById(Integer id) {
         iCartRepository.deleteById(id);
+    }
+
+    @Override
+    public Cart findByProductAndUser(Product product, User user) {
+        return iCartRepository.findByProductAndUser(product, user);
     }
 }

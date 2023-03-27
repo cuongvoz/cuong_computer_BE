@@ -14,7 +14,7 @@ public interface ICartRepository extends JpaRepository<Cart,Integer> {
     @Transactional
     void deleteAllByUser(User user);
     List<Cart> getAllByUser(User user);
-    Boolean existsByProduct(Product product);
-
+    Boolean existsByProductAndUser(Product product,User user);
+    Cart findByProductAndUser(Product product,User user);
     Cart findByProduct(Product product);
 }

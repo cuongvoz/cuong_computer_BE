@@ -10,6 +10,8 @@ public class CuongComputerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CuongComputerApplication.class, args);
+
+
         }
 
 }
