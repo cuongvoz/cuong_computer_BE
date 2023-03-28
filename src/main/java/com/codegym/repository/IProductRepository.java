@@ -8,19 +8,36 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface IProductRepository extends JpaRepository<Product,Integer> {
-    @Query(value = "select * from product where name like %:name% and is_delete = false",nativeQuery = true)
-    Page<Product> findAllByName(Pageable pageable,@Param("name") String name);
+import java.util.List;
 
-    @Query(value = " select p.*  from `product` p join `buy_history` bh on p.id = bh.product_id where p.is_delete = false  group by p.id order by sum(p.id) desc",nativeQuery = true)
+@Repository
+public interface IProductRepository extends JpaRepository<Product, Integer> {
+    @Query(value = "select * from product where name like %:name% and is_delete = false", nativeQuery = true)
+    Page<Product> findAllByName(Pageable pageable, @Param("name") String name);
+
+    @Query(value = " select p.*  from `product` p join `buy_history` bh on p.id = bh.product_id where p.is_delete = false  group by p.id order by sum(p.id) desc", nativeQuery = true)
     Page<Product> hotProduct(Pageable pageable);
 
-    @Query(value = "select * from product where category_id = :id and is_delete =false",nativeQuery = true)
+    @Query(value = "select * from product where category_id = :id and is_delete =false", nativeQuery = true)
     Page<Product> findByCategory(Pageable pageable, @Param("id") int id);
-    @Query(value = "select * from product where category_id = :id and is_delete =false and name like %:name%",nativeQuery = true)
-    Page<Product> findByCategoryAndName(Pageable pageable, @Param("id") int id,@Param("name") String name);
 
-    @Query(value = "select * from product where is_delete = false",nativeQuery = true)
-   Page<Product> findAll(Pageable pageable);
+    @Query(value = "select * from product where category_id = :id and is_delete =false and name like %:name%", nativeQuery = true)
+    Page<Product> findByCategoryAndName(Pageable pageable, @Param("id") int id, @Param("name") String name);
+
+    @Query(value = "select * from product where is_delete = false", nativeQuery = true)
+    Page<Product> findAll(Pageable pageable);
+    @Query(value = "select * from product where category_id = :id and (cpu like %:cpu1% or cpu like %:cpu2%) and is_delete = false", nativeQuery = true)
+    Page<Product> findAllByIsDeleteFalseAndCpuAndCategory_Id(@Param("cpu1") String cpu1,@Param("cpu2") String cpu2,@Param("id") Integer category_id, Pageable pageable);
+
+    Page<Product> findAllByBrandAndIsDeleteFalseAndCategory_Id(String brand, Integer category_id, Pageable pageable);
+
+    Page<Product> findAllByBrandAndIsDeleteFalse(String brand, Pageable pageable);
+
+    Page<Product> findAllByIsDeleteFalseAndPriceBetween(Double price, Double price2, Pageable pageable);
+
+    Page<Product> findAllByIsDeleteFalseAndPriceBetweenAndCategory_Id(Double price, Double price2, Integer category_id, Pageable pageable);
+
+    @Query(value = "select * from product where brand in (:brand) and category_id = :id and is_delete = false ", nativeQuery = true)
+    Page<Product> findAllByBrand(@Param("brand") List<String> brand, Pageable pageable,@Param("id") int id);
+
 }

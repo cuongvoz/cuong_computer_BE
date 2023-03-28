@@ -15,6 +15,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/products")
@@ -43,18 +46,41 @@ public class ProductController {
     public ResponseEntity<Page<Product>> findAllByName(@PageableDefault(size = 12)Pageable pageable,@PathVariable("name") String name) {
         return new ResponseEntity<>( iProductService.findAllByName(pageable,name),HttpStatus.OK);
     }
+
+    @PostMapping("/searchBrand")
+    public ResponseEntity<?> findByBrand(@PageableDefault(size = 12)Pageable pageable,@RequestBody List<String> brand) {
+        return new ResponseEntity<>(iProductService.findAllByBrandLaptop(brand, pageable),HttpStatus.OK);
+    }
+    @PostMapping("/searchBrandMouse")
+    public ResponseEntity<?> findByBrandMouse(@PageableDefault(size = 12)Pageable pageable,@RequestBody List<String> brand) {
+        return new ResponseEntity<>(iProductService.findAllByBrandMouse(brand, pageable),HttpStatus.OK);
+    }
+    @GetMapping("/searchPrice/{price}/{oldPrice}/{categoryId}")
+    public ResponseEntity<Page<Product>> findByBrand(@PageableDefault(size = 12)Pageable pageable,@PathVariable("price") Double price,@PathVariable("oldPrice") Double oldPrice,@PathVariable("categoryId") Integer categoryId) {
+        if (categoryId == 7) {
+            return new ResponseEntity<>( iProductService.findAllByIsDeleteFalseAndPriceBetween(price,oldPrice,pageable),HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>( iProductService.findAllByIsDeleteFalseAndPriceBetweenAndCategory_Id(price,oldPrice,categoryId,pageable),HttpStatus.OK);
+
+        }
+    }
     @GetMapping("/category/{id}")
     public ResponseEntity<Page<Product>> findAllByCategory(@PageableDefault(size = 12)Pageable pageable,@PathVariable("id") int  id) {
         return new ResponseEntity<>( iProductService.findByCategory(pageable,id),HttpStatus.OK);
+    }
+    @PostMapping("/pcgaming/cpu")
+    public ResponseEntity<Page<Product>> findAllByCategoryAndCpu(@PageableDefault(size = 12)Pageable pageable,@RequestBody String[] cpu) {
+        return new ResponseEntity<>( iProductService.findAllByIsDeleteFalseAndCpuAndCategory_Id(cpu,2,pageable),HttpStatus.OK);
     }
     @GetMapping("/category/{id}/{name}")
     public ResponseEntity<Page<Product>> findAllByCategoryAndName(@PageableDefault(size = 12)Pageable pageable,@PathVariable("id") int  id,@PathVariable("name") String name) {
         return new ResponseEntity<>( iProductService.findByCategoryAndName(pageable,id,name),HttpStatus.OK);
     }
 
+
+
     @PostMapping("/PC")
     public ResponseEntity<?> createPC(@Valid @RequestBody PC pc, BindingResult bindingResult) {
-        System.out.println(pc);
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_GATEWAY);
         }
@@ -80,7 +106,6 @@ public class ProductController {
     }
     @PostMapping("/Keyboard")
     public ResponseEntity<?> createKeyboard(@Valid @RequestBody Keyboard keyboard, BindingResult bindingResult) {
-        System.out.println(keyboard);
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_GATEWAY);
         }

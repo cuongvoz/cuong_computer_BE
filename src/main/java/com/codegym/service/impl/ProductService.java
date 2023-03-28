@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class ProductService implements IProductService {
     @Autowired
@@ -48,4 +50,41 @@ public class ProductService implements IProductService {
     public Page<Product> hotProduct(Pageable pageable) {
         return iProductRepository.hotProduct(pageable);
     }
+
+    @Override
+    public Page<Product> findAllByBrandAndIsDeleteFalseAndCategory_Id(String brand, Integer category_id, Pageable pageable) {
+        return iProductRepository.findAllByBrandAndIsDeleteFalseAndCategory_Id(brand, category_id, pageable);
+    }
+
+    @Override
+    public Page<Product> findAllByBrandAndIsDeleteFalse(String brand, Pageable pageable) {
+        return iProductRepository.findAllByBrandAndIsDeleteFalse(brand, pageable);
+    }
+
+    @Override
+    public Page<Product> findAllByIsDeleteFalseAndPriceBetween(Double price, Double price2, Pageable pageable) {
+        return iProductRepository.findAllByIsDeleteFalseAndPriceBetween(price, price2, pageable);
+    }
+
+    @Override
+    public Page<Product> findAllByIsDeleteFalseAndPriceBetweenAndCategory_Id(Double price, Double price2, Integer category_id, Pageable pageable) {
+        return iProductRepository.findAllByIsDeleteFalseAndPriceBetweenAndCategory_Id(price, price2, category_id, pageable);
+    }
+
+    @Override
+    public Page<Product> findAllByBrandMouse(List<String> brand, Pageable pageable) {
+        return iProductRepository.findAllByBrand(brand, pageable,5);
+    }
+
+    @Override
+    public Page<Product> findAllByBrandLaptop(List<String> brand, Pageable pageable) {
+        return iProductRepository.findAllByBrand(brand, pageable,1);
+    }
+
+    @Override
+    public Page<Product> findAllByIsDeleteFalseAndCpuAndCategory_Id(String[] cpu, Integer category_id, Pageable pageable) {
+        return iProductRepository.findAllByIsDeleteFalseAndCpuAndCategory_Id(cpu[0],cpu[1], category_id, pageable);
+    }
+
+
 }
