@@ -1,6 +1,7 @@
 package com.codegym.model.product;
 
 
+import com.codegym.model.category.Brand;
 import com.codegym.model.category.Category;
 
 import javax.validation.constraints.Min;
@@ -64,6 +65,8 @@ public class PC {
     public Double getPrice() {
         return price;
     }
+
+
 
     public void setPrice(Double price) {
         this.price = price;

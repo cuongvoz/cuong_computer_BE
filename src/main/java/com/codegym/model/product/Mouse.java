@@ -1,6 +1,7 @@
 package com.codegym.model.product;
 
 
+import com.codegym.model.category.Brand;
 import com.codegym.model.category.Category;
 
 import javax.validation.constraints.Min;
@@ -33,6 +34,7 @@ public class Mouse {
    private String connect;
     @NotBlank(message = "Vui lòng nhập hệ điều hành")
     private String os;
+    private Brand localBrand;
     @NotBlank(message = "Vui lòng nhập điểm nổi bật")
     private String reliability;
     private Category category;
@@ -86,7 +88,13 @@ public class Mouse {
     public String getImage() {
         return image;
     }
+    public Brand getLocalBrand() {
+        return localBrand;
+    }
 
+    public void setLocalBrand(Brand localBrand) {
+        this.localBrand = localBrand;
+    }
     public void setImage(String image) {
         this.image = image;
     }

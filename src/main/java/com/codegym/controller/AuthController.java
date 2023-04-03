@@ -1,5 +1,6 @@
 package com.codegym.controller;
 
+import com.codegym.dto.request.AvatarDto;
 import com.codegym.dto.request.SignInForm;
 import com.codegym.dto.request.SignUpForm;
 import com.codegym.dto.response.JwtResponse;
@@ -96,5 +97,13 @@ public class AuthController {
     @GetMapping("/profile/{id}")
     public ResponseEntity<?> profile(@PathVariable("id") int id) {
         return new ResponseEntity<>(iUserService.findById(id),HttpStatus.ACCEPTED);
+    }
+    @PostMapping("/avatar")
+    public ResponseEntity<?> changeAvatar(@RequestBody AvatarDto avatarDto) {
+       User user = iUserService.findById(avatarDto.getId()).orElse(null);
+        assert user != null;
+        user.setAvatar(avatarDto.getAvatar());
+       iUserService.save(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

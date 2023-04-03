@@ -110,7 +110,6 @@ public class CartController {
         iBillService.save(bill);
         List<Cart> carts = iCartService.getAllByUser(iUserService.findById(buyDTO.getId()));
         for (int i = 0; i < carts.size(); i++) {
-
             BuyHistory buyHistory = new BuyHistory(carts.get(i).getProduct(), bill, carts.get(i).getQuantity());
             Product product = carts.get(i).getProduct();
             product.setQuantity(product.getQuantity() - carts.get(i).getQuantity());

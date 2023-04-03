@@ -1,6 +1,7 @@
 package com.codegym.model.product;
 
 
+import com.codegym.model.category.Brand;
 import com.codegym.model.category.Category;
 
 import javax.validation.constraints.Min;
@@ -33,6 +34,7 @@ public class Keyboard {
     private String reliability;
     @NotBlank(message = "Vui lòng nhập hộ trợ tương thích ")
     private String compatible;
+    private Brand localBrand;
     private Category category;
 
     public Keyboard() {
@@ -97,7 +99,13 @@ public class Keyboard {
     public String getKeycap() {
         return keycap;
     }
+    public Brand getLocalBrand() {
+        return localBrand;
+    }
 
+    public void setLocalBrand(Brand localBrand) {
+        this.localBrand = localBrand;
+    }
     public void setKeycap(String keycap) {
         this.keycap = keycap;
     }

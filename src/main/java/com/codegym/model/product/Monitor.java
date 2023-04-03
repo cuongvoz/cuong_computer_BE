@@ -1,6 +1,7 @@
 package com.codegym.model.product;
 
 
+import com.codegym.model.category.Brand;
 import com.codegym.model.category.Category;
 
 import javax.validation.constraints.Min;
@@ -35,9 +36,10 @@ public class Monitor {
 
     private String connector;
     @NotBlank(message = "Vui lòng nhập tấm nền ")
-
     private String panels;
   private Category category;
+    private Brand localBrand;
+
     public Monitor() {
     }
 
@@ -48,7 +50,13 @@ public class Monitor {
     public void setId(Integer id) {
         this.id = id;
     }
+    public Brand getLocalBrand() {
+        return localBrand;
+    }
 
+    public void setLocalBrand(Brand localBrand) {
+        this.localBrand = localBrand;
+    }
     public Category getCategory() {
         return category;
     }

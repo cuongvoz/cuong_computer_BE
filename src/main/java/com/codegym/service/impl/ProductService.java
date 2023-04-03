@@ -53,37 +53,38 @@ public class ProductService implements IProductService {
 
     @Override
     public Page<Product> findAllByBrandAndIsDeleteFalseAndCategory_Id(String brand, Integer category_id, Pageable pageable) {
-        return iProductRepository.findAllByBrandAndIsDeleteFalseAndCategory_Id(brand, category_id, pageable);
+        return iProductRepository.findAllByBrandAndIsDeleteFalseAndCategory_IdOrderByPriceAscIdDesc(brand, category_id, pageable);
     }
 
     @Override
     public Page<Product> findAllByBrandAndIsDeleteFalse(String brand, Pageable pageable) {
-        return iProductRepository.findAllByBrandAndIsDeleteFalse(brand, pageable);
+        return iProductRepository.findAllByBrandAndIsDeleteFalseOrderByPriceAscIdDesc(brand, pageable);
     }
 
     @Override
     public Page<Product> findAllByIsDeleteFalseAndPriceBetween(Double price, Double price2, Pageable pageable) {
-        return iProductRepository.findAllByIsDeleteFalseAndPriceBetween(price, price2, pageable);
+        return iProductRepository.findAllByIsDeleteFalseAndPriceBetweenOrderByPriceAscIdDesc(price, price2, pageable);
     }
 
     @Override
     public Page<Product> findAllByIsDeleteFalseAndPriceBetweenAndCategory_Id(Double price, Double price2, Integer category_id, Pageable pageable) {
-        return iProductRepository.findAllByIsDeleteFalseAndPriceBetweenAndCategory_Id(price, price2, category_id, pageable);
+        return iProductRepository.findAllByIsDeleteFalseAndPriceBetweenAndCategory_IdOrderByPriceAscIdDesc(price, price2, category_id, pageable);
     }
 
     @Override
-    public Page<Product> findAllByBrandMouse(List<String> brand, Pageable pageable) {
-        return iProductRepository.findAllByBrand(brand, pageable,5);
+    public Page<Product> findAllByBrandAndCategory(List<Integer> brand, int category, Pageable pageable) {
+        return iProductRepository.findAllByBrandAndCategoryOrderByPrice(brand,pageable,category);
     }
 
     @Override
-    public Page<Product> findAllByBrandLaptop(List<String> brand, Pageable pageable) {
-        return iProductRepository.findAllByBrand(brand, pageable,1);
+    public Page<Product> findAllByBrand(List<Integer> brand, Pageable pageable) {
+        return iProductRepository.findAllByBrandOrDOrderByPrice(brand,pageable);
     }
+
 
     @Override
     public Page<Product> findAllByIsDeleteFalseAndCpuAndCategory_Id(String[] cpu, Integer category_id, Pageable pageable) {
-        return iProductRepository.findAllByIsDeleteFalseAndCpuAndCategory_Id(cpu[0],cpu[1], category_id, pageable);
+        return iProductRepository.findAllByIsDeleteFalseAndCpuAndCategory_IdOrderByPriceAscIdDesc(cpu[0],cpu[1], category_id, pageable);
     }
 
 

@@ -1,6 +1,7 @@
 package com.codegym.controller;
 
 
+import com.codegym.model.bill.SearchBrandDTO;
 import com.codegym.model.product.*;
 import com.codegym.service.*;
 import org.springframework.beans.BeanUtils;
@@ -33,9 +34,15 @@ public class ProductController {
     public ResponseEntity<Product> getProduct(@PathVariable("id") int id) {
         return new ResponseEntity<>(iProductService.findById(id),HttpStatus.OK);
     }
-
+    @GetMapping("/warehouse/{id}/{quantity}")
+    public ResponseEntity<?> wareHouse(@PathVariable("id") int id,@PathVariable("quantity") int quantity) {
+        Product product = iProductService.findById(id);
+        product.setQuantity(product.getQuantity() + quantity);
+        iProductService.save(product);
+        return new ResponseEntity<>( HttpStatus.OK);
+    }
     @RequestMapping
-    public ResponseEntity<Page<Product>> getAll(@PageableDefault(size = 12)Pageable pageable) {
+    public ResponseEntity<Page<Product>> getAll(@PageableDefault(size = 6)Pageable pageable) {
         return new ResponseEntity<>( iProductService.findAll(pageable),HttpStatus.OK);
     }
     @RequestMapping("/hot")
@@ -43,20 +50,20 @@ public class ProductController {
         return new ResponseEntity<>( iProductService.hotProduct(pageable),HttpStatus.OK);
     }
     @GetMapping("/all/{name}")
-    public ResponseEntity<Page<Product>> findAllByName(@PageableDefault(size = 12)Pageable pageable,@PathVariable("name") String name) {
+    public ResponseEntity<Page<Product>> findAllByName(@PageableDefault(size = 6)Pageable pageable,@PathVariable("name") String name) {
         return new ResponseEntity<>( iProductService.findAllByName(pageable,name),HttpStatus.OK);
     }
 
     @PostMapping("/searchBrand")
-    public ResponseEntity<?> findByBrand(@PageableDefault(size = 12)Pageable pageable,@RequestBody List<String> brand) {
-        return new ResponseEntity<>(iProductService.findAllByBrandLaptop(brand, pageable),HttpStatus.OK);
+    public ResponseEntity<?> findByBrand(@PageableDefault(size = 6)Pageable pageable,@RequestBody SearchBrandDTO brand) {
+        if (brand.getId() == 7) {
+            return new ResponseEntity<>(iProductService.findAllByBrand(brand.getBrand(),pageable),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(iProductService.findAllByBrandAndCategory(brand.getBrand(), brand.getId(),pageable),HttpStatus.OK);
     }
-    @PostMapping("/searchBrandMouse")
-    public ResponseEntity<?> findByBrandMouse(@PageableDefault(size = 12)Pageable pageable,@RequestBody List<String> brand) {
-        return new ResponseEntity<>(iProductService.findAllByBrandMouse(brand, pageable),HttpStatus.OK);
-    }
+
     @GetMapping("/searchPrice/{price}/{oldPrice}/{categoryId}")
-    public ResponseEntity<Page<Product>> findByBrand(@PageableDefault(size = 12)Pageable pageable,@PathVariable("price") Double price,@PathVariable("oldPrice") Double oldPrice,@PathVariable("categoryId") Integer categoryId) {
+    public ResponseEntity<Page<Product>> findByBrand(@PageableDefault(size = 6)Pageable pageable,@PathVariable("price") Double price,@PathVariable("oldPrice") Double oldPrice,@PathVariable("categoryId") Integer categoryId) {
         if (categoryId == 7) {
             return new ResponseEntity<>( iProductService.findAllByIsDeleteFalseAndPriceBetween(price,oldPrice,pageable),HttpStatus.OK);
         } else {
@@ -65,15 +72,15 @@ public class ProductController {
         }
     }
     @GetMapping("/category/{id}")
-    public ResponseEntity<Page<Product>> findAllByCategory(@PageableDefault(size = 12)Pageable pageable,@PathVariable("id") int  id) {
+    public ResponseEntity<Page<Product>> findAllByCategory(@PageableDefault(size = 6)Pageable pageable,@PathVariable("id") int  id) {
         return new ResponseEntity<>( iProductService.findByCategory(pageable,id),HttpStatus.OK);
     }
     @PostMapping("/pcgaming/cpu")
-    public ResponseEntity<Page<Product>> findAllByCategoryAndCpu(@PageableDefault(size = 12)Pageable pageable,@RequestBody String[] cpu) {
+    public ResponseEntity<Page<Product>> findAllByCategoryAndCpu(@PageableDefault(size = 6)Pageable pageable,@RequestBody String[] cpu) {
         return new ResponseEntity<>( iProductService.findAllByIsDeleteFalseAndCpuAndCategory_Id(cpu,2,pageable),HttpStatus.OK);
     }
     @GetMapping("/category/{id}/{name}")
-    public ResponseEntity<Page<Product>> findAllByCategoryAndName(@PageableDefault(size = 12)Pageable pageable,@PathVariable("id") int  id,@PathVariable("name") String name) {
+    public ResponseEntity<Page<Product>> findAllByCategoryAndName(@PageableDefault(size = 6)Pageable pageable,@PathVariable("id") int  id,@PathVariable("name") String name) {
         return new ResponseEntity<>( iProductService.findByCategoryAndName(pageable,id,name),HttpStatus.OK);
     }
 
@@ -85,6 +92,7 @@ public class ProductController {
             return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_GATEWAY);
         }
         Product product = new Product(pc.getName(),pc.getPrice(), pc.getOldPrice(), pc.getImage(),pc.getCpu(),pc.getMainboard(), pc.getRam(), pc.getSsd(), pc.getVga(), pc.getPsu(), pc.getCases(),pc.getCategory());
+
         if (pc.getId() != null) {
             product.setId(pc.getId());
         }
@@ -98,6 +106,7 @@ public class ProductController {
             return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_GATEWAY);
         }
         Product product = new Product(chair.getName(),chair.getPrice(), chair.getOldPrice(), chair.getImage(),chair.getMaterial(),chair.getKneelings(), chair.getModel(), chair.getBrand(), chair.getBackrest(),chair.getCategory());
+        product.setLocalBrand(chair.getLocalBrand());
         if (chair.getId() != null) {
             product.setId(chair.getId());
         }
@@ -110,6 +119,7 @@ public class ProductController {
             return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_GATEWAY);
         }
         Product product = new Product(keyboard.getName(),keyboard.getPrice(), keyboard.getOldPrice(), keyboard.getImage(),keyboard.getKeyboard(),keyboard.getConnect(), keyboard.getKeycap(), keyboard.getswitchKey(), keyboard.getReliability(),keyboard.getCompatible(), keyboard.getCategory());
+        product.setLocalBrand(keyboard.getLocalBrand());
         if (keyboard.getId() != null) {
             product.setId(keyboard.getId());
         }
@@ -122,6 +132,7 @@ public class ProductController {
             return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_GATEWAY);
         }
         Product product = new Product(laptop.getName(),laptop.getPrice(), laptop.getOldPrice(), laptop.getImage(),laptop.getCpu(),laptop.getRam(), laptop.getVga(), laptop.getHardDrive(), laptop.getMonitor(),laptop.getPin(),laptop.getColor(),laptop.getWeight(),laptop.getOs(), laptop.getCategory());
+        product.setLocalBrand(laptop.getLocalBrand());
         if (laptop.getId() != null) {
             product.setId(laptop.getId());
         }
@@ -134,6 +145,7 @@ public class ProductController {
             return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_GATEWAY);
         }
         Product product = new Product(monitor.getId(),monitor.getName(),monitor.getPrice(), monitor.getOldPrice(), monitor.getImage(),monitor.getScreenSize(),monitor.getResolution(), monitor.getScanFrequency(), monitor.getAspectRatio(), monitor.getConnector(),monitor.getPanels(), monitor.getCategory());
+        product.setLocalBrand(monitor.getLocalBrand());
         iProductService.save(product);
         return new ResponseEntity<>(product,HttpStatus.CREATED);
     }
@@ -144,6 +156,7 @@ public class ProductController {
             return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_GATEWAY);
         }
         Product product = new Product(mouse.getId(),mouse.getName(),mouse.getPrice(), mouse.getOldPrice(), mouse.getImage(),mouse.getConnect(),mouse.getReliability(), mouse.getCompatible(), mouse.getSensor(), mouse.getDpi(),mouse.getWeight(),mouse.getOs(), mouse.getCategory());
+        product.setLocalBrand(mouse.getLocalBrand());
         iProductService.save(product);
         return new ResponseEntity<>(product,HttpStatus.CREATED);
     }

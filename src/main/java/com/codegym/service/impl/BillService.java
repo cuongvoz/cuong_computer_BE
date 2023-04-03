@@ -4,6 +4,8 @@ import com.codegym.model.bill.Bill;
 import com.codegym.repository.IBillRepository;
 import com.codegym.service.IBillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,19 @@ public class BillService implements IBillService {
         iBillRepository.save(bill);
     }
 
+
     @Override
-    public Bill findByDate(String date) {
-        return iBillRepository.findByBuyDate(date);
+    public Bill findById(Integer id) {
+        return iBillRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Page<Bill> findAll(Pageable pageable) {
+        return iBillRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Bill> findAllByUser_IdOrOrderByIdDesc(Pageable pageable, Integer id) {
+        return iBillRepository.findAllByUser_IdOrOrderByIdDesc(pageable, id);
     }
 }

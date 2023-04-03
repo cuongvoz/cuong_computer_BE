@@ -1,6 +1,7 @@
 package com.codegym.model.product;
 
 
+import com.codegym.model.category.Brand;
 import com.codegym.model.category.Category;
 
 import javax.validation.constraints.Min;
@@ -38,9 +39,10 @@ public class Laptop {
     @NotBlank(message = "Hãy nhập trọng lượng")
     private String weight;
     @NotBlank(message = "Hãy nhập các hệ điều hành")
-
     private String os;
-  public Category category;
+    private Brand localBrand;
+
+    public Category category;
     public Laptop() {
     }
 
@@ -51,7 +53,13 @@ public class Laptop {
     public void setName(String name) {
         this.name = name;
     }
+    public Brand getLocalBrand() {
+        return localBrand;
+    }
 
+    public void setLocalBrand(Brand localBrand) {
+        this.localBrand = localBrand;
+    }
     public Integer getId() {
         return id;
     }

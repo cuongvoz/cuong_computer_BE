@@ -1,6 +1,7 @@
 package com.codegym.model.product;
 
 
+import com.codegym.model.category.Brand;
 import com.codegym.model.category.Category;
 
 import javax.validation.constraints.Min;
@@ -29,6 +30,7 @@ public class Chair {
     private String model;
     @NotBlank(message = "Vui lòng nhập kiểu ngả lưng")
     private String backrest;
+    private Brand localBrand;
     private Category category;
 
     public Chair() {
@@ -49,7 +51,13 @@ public class Chair {
     public void setName(String name) {
         this.name = name;
     }
+    public Brand getLocalBrand() {
+        return localBrand;
+    }
 
+    public void setLocalBrand(Brand localBrand) {
+        this.localBrand = localBrand;
+    }
     public Double getPrice() {
         return price;
     }

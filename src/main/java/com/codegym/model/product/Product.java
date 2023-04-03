@@ -1,5 +1,6 @@
 package com.codegym.model.product;
 
+import com.codegym.model.category.Brand;
 import com.codegym.model.category.Category;
 import com.codegym.model.warehouse.WareHouse;
 
@@ -32,6 +33,8 @@ public class Product {
     private String material;
     private String kneelings;
     private String brand;
+    @ManyToOne
+    private Brand localBrand;
     private String model;
     private String backrest;
     private String hardDrive;
@@ -225,13 +228,7 @@ public class Product {
         this.keycap = keycap;
     }
 
-    public String getswitchKey() {
-        return switchKey;
-    }
 
-    public void setswitchKey(String aswitchKey) {
-        switchKey = aswitchKey;
-    }
 
     public String getReliability() {
         return reliability;
@@ -275,6 +272,22 @@ public class Product {
 
     public String getSsd() {
         return ssd;
+    }
+
+    public String getSwitchKey() {
+        return switchKey;
+    }
+
+    public void setSwitchKey(String switchKey) {
+        this.switchKey = switchKey;
+    }
+
+    public Brand getLocalBrand() {
+        return localBrand;
+    }
+
+    public void setLocalBrand(Brand localBrand) {
+        this.localBrand = localBrand;
     }
 
     public void setSsd(String ssd) {
