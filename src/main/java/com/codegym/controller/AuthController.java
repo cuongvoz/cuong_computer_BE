@@ -3,6 +3,7 @@ package com.codegym.controller;
 import com.codegym.dto.request.AvatarDto;
 import com.codegym.dto.request.SignInForm;
 import com.codegym.dto.request.SignUpForm;
+import com.codegym.dto.request.UpdateProfileDto;
 import com.codegym.dto.response.JwtResponse;
 import com.codegym.dto.response.ResponseMessage;
 import com.codegym.model.product.Product;
@@ -16,6 +17,7 @@ import com.codegym.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,9 +44,10 @@ public class AuthController {
     private IRoleService iRoleService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @PostMapping("/signup")
     public ResponseEntity<?> register(@Valid @RequestBody SignUpForm signUpForm, BindingResult bindingResult) {
-        new SignUpForm().validate(iUserService.findAll(),signUpForm,bindingResult);
+        new SignUpForm().validate(iUserService.findAll(), signUpForm, bindingResult);
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getFieldErrors(), HttpStatus.BAD_REQUEST);
         }
@@ -76,11 +79,11 @@ public class AuthController {
         iUserService.save(user);
         return new ResponseEntity<>(new ResponseMessage("Đăng kí thành công"), HttpStatus.OK);
     }
-    @PostMapping("/login")
 
-    public ResponseEntity<?> login(@Valid @RequestBody SignInForm signInForm , BindingResult bindingResult) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody SignInForm signInForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bindingResult.getFieldErrors(), HttpStatus.BAD_REQUEST);
         }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(signInForm.getUsername(), signInForm.getPassword()));
@@ -88,22 +91,47 @@ public class AuthController {
         String token = jwtProvider.createToken(authentication);
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         return ResponseEntity.ok(new JwtResponse(token, userPrinciple.getName(), userPrinciple.getId(), userPrinciple.getUsername(), userPrinciple.getEmail(), userPrinciple.getPassword(), userPrinciple.getAvatar()
-                ,userPrinciple.getPhoneNumber(),
+                , userPrinciple.getPhoneNumber(),
                 userPrinciple.getAddress(),
                 userPrinciple.getGender(),
                 userPrinciple.getDateOfBirth()
                 , userPrinciple.getAuthorities()));
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @GetMapping("/profile/{id}")
     public ResponseEntity<?> profile(@PathVariable("id") int id) {
-        return new ResponseEntity<>(iUserService.findById(id),HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(iUserService.findById(id), HttpStatus.ACCEPTED);
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @PostMapping("/avatar")
     public ResponseEntity<?> changeAvatar(@RequestBody AvatarDto avatarDto) {
-       User user = iUserService.findById(avatarDto.getId()).orElse(null);
+        User user = iUserService.findById(avatarDto.getId());
         assert user != null;
         user.setAvatar(avatarDto.getAvatar());
-       iUserService.save(user);
+        iUserService.save(user);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+        @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
+    @PostMapping("/update")
+    public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateProfileDto profileDto, BindingResult bindingResult) {
+        new UpdateProfileDto().validate(iUserService.findAll(),profileDto,bindingResult);
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(bindingResult.getFieldErrors(), HttpStatus.BAD_REQUEST);
+        }
+        User user = iUserService.findById(profileDto.getId());
+            assert user != null;
+            user.setId(profileDto.getId());
+            user.setAddress(profileDto.getAddress());
+            user.setName(profileDto.getName());
+            user.setEmail(profileDto.getEmail());
+            user.setPhoneNumber(profileDto.getPhoneNumber());
+            user.setDateOfBirth(profileDto.getDateOfBirth());
+            user.setGender(profileDto.getGender());
+            iUserService.save(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 }

@@ -81,6 +81,11 @@ public class ProductService implements IProductService {
         return iProductRepository.findAllByBrandOrDOrderByPrice(brand,pageable);
     }
 
+    @Override
+    public boolean existsById(Integer id) {
+        return iProductRepository.existsById(id);
+    }
+
 
     @Override
     public Page<Product> findAllByIsDeleteFalseAndCpuAndCategory_Id(String[] cpu, Integer category_id, Pageable pageable) {

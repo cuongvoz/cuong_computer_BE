@@ -30,14 +30,10 @@ public class UserService implements IUserService {
         iUserRepository.save(user);
     }
 
-    @Override
-    public Optional<User> findByUsername(String username) {
-        return iUserRepository.findByUsername(username);
-    }
 
     @Override
-    public Optional<User> findById(Integer id) {
-        return iUserRepository.findById(id);
+    public User findById(Integer id) {
+        return iUserRepository.findById(id).orElse(null);
     }
 
     @Override

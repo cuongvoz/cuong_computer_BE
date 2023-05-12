@@ -29,9 +29,7 @@ public class CartController {
 
     @GetMapping("/{id}")
     private ResponseEntity<List<Cart>> getAllByUser(@PathVariable("id") Integer id) {
-        System.out.println("id =" + id);
-        System.out.println(iCartService.getAllByUser(iUserService.findById(id).orElse(null)));
-        return new ResponseEntity<>(iCartService.getAllByUser(iUserService.findById(id).orElse(null)), HttpStatus.OK);
+        return new ResponseEntity<>(iCartService.getAllByUser(iUserService.findById(id)), HttpStatus.OK);
     }
 
     @PostMapping("/add")
@@ -107,6 +105,11 @@ public class CartController {
         bill.setQuantity(buyDTO.getQuantity());
         bill.setTotalPayment(buyDTO.getTotal());
         bill.setBuyDate(buyDTO.getTime());
+        bill.setNote(buyDTO.getNote());
+        bill.setEmail(buyDTO.getEmail());
+        bill.setName(buyDTO.getName());
+        bill.setAddress(buyDTO.getAddress());
+        bill.setPhoneNumber(buyDTO.getPhoneNumber());
         iBillService.save(bill);
         List<Cart> carts = iCartService.getAllByUser(iUserService.findById(buyDTO.getId()));
         for (int i = 0; i < carts.size(); i++) {

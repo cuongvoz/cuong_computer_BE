@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ import java.util.Objects;
 @CrossOrigin("*")
 public class ProductController {
 
-    @Autowired
+    @Autowired  
     private IProductService iProductService;
 
     @Autowired
@@ -34,6 +35,7 @@ public class ProductController {
     public ResponseEntity<Product> getProduct(@PathVariable("id") int id) {
         return new ResponseEntity<>(iProductService.findById(id),HttpStatus.OK);
     }
+    @PreAuthorize("hasAnyRole('EMPLOYEE','ADMIN')")
     @GetMapping("/warehouse/{id}/{quantity}")
     public ResponseEntity<?> wareHouse(@PathVariable("id") int id,@PathVariable("quantity") int quantity) {
         Product product = iProductService.findById(id);
@@ -71,6 +73,7 @@ public class ProductController {
 
         }
     }
+
     @GetMapping("/category/{id}")
     public ResponseEntity<Page<Product>> findAllByCategory(@PageableDefault(size = 6)Pageable pageable,@PathVariable("id") int  id) {
         return new ResponseEntity<>( iProductService.findByCategory(pageable,id),HttpStatus.OK);
@@ -85,7 +88,7 @@ public class ProductController {
     }
 
 
-
+    @PreAuthorize("hasAnyRole('EMPLOYEE','ADMIN')")
     @PostMapping("/PC")
     public ResponseEntity<?> createPC(@Valid @RequestBody PC pc, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -95,11 +98,14 @@ public class ProductController {
 
         if (pc.getId() != null) {
             product.setId(pc.getId());
+            Product product2 = iProductService.findById(pc.getId());
+            product.setQuantity(product2.getQuantity());
         }
         iProductService.save(product);
 
         return new ResponseEntity<>(product,HttpStatus.CREATED);
     }
+    @PreAuthorize("hasAnyRole('EMPLOYEE','ADMIN')")
     @PostMapping("/Chair")
     public ResponseEntity<?> createChair(@Valid @RequestBody Chair chair, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -109,46 +115,67 @@ public class ProductController {
         product.setLocalBrand(chair.getLocalBrand());
         if (chair.getId() != null) {
             product.setId(chair.getId());
+            Product product2 = iProductService.findById(chair.getId());
+            product.setQuantity(product2.getQuantity());
         }
         iProductService.save(product);
         return new ResponseEntity<>(product,HttpStatus.CREATED);
     }
+    @PreAuthorize("hasAnyRole('EMPLOYEE','ADMIN')")
     @PostMapping("/Keyboard")
     public ResponseEntity<?> createKeyboard(@Valid @RequestBody Keyboard keyboard, BindingResult bindingResult) {
+
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_GATEWAY);
         }
         Product product = new Product(keyboard.getName(),keyboard.getPrice(), keyboard.getOldPrice(), keyboard.getImage(),keyboard.getKeyboard(),keyboard.getConnect(), keyboard.getKeycap(), keyboard.getswitchKey(), keyboard.getReliability(),keyboard.getCompatible(), keyboard.getCategory());
-        product.setLocalBrand(keyboard.getLocalBrand());
         if (keyboard.getId() != null) {
             product.setId(keyboard.getId());
+                Product product2 = iProductService.findById(keyboard.getId());
+                product.setQuantity(product2.getQuantity());
         }
+        product.setLocalBrand(keyboard.getLocalBrand());
         iProductService.save(product);
         return new ResponseEntity<>(product,HttpStatus.CREATED);
     }
+    @PreAuthorize("hasAnyRole('EMPLOYEE','ADMIN')")
     @PostMapping("/Laptop")
     public ResponseEntity<?> createlaptop(@Valid @RequestBody Laptop laptop, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_GATEWAY);
         }
         Product product = new Product(laptop.getName(),laptop.getPrice(), laptop.getOldPrice(), laptop.getImage(),laptop.getCpu(),laptop.getRam(), laptop.getVga(), laptop.getHardDrive(), laptop.getMonitor(),laptop.getPin(),laptop.getColor(),laptop.getWeight(),laptop.getOs(), laptop.getCategory());
+        if (iProductService.existsById(laptop.getId())) {
+            Product product2 = iProductService.findById(laptop.getId());
+            product.setQuantity(product2.getQuantity());
+        }
         product.setLocalBrand(laptop.getLocalBrand());
         if (laptop.getId() != null) {
+            Product product2 = iProductService.findById(laptop.getId());
+            product.setQuantity(product2.getQuantity());
             product.setId(laptop.getId());
         }
         iProductService.save(product);
         return new ResponseEntity<>(product,HttpStatus.CREATED);
     }
+    @PreAuthorize("hasAnyRole('EMPLOYEE','ADMIN')")
     @PostMapping("/Monitor")
     public ResponseEntity<?> createMonitor(@Valid @RequestBody Monitor monitor, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_GATEWAY);
         }
         Product product = new Product(monitor.getId(),monitor.getName(),monitor.getPrice(), monitor.getOldPrice(), monitor.getImage(),monitor.getScreenSize(),monitor.getResolution(), monitor.getScanFrequency(), monitor.getAspectRatio(), monitor.getConnector(),monitor.getPanels(), monitor.getCategory());
+        if (monitor.getId() != null) {
+            Product product2 = iProductService.findById(monitor.getId());
+            product.setQuantity(product2.getQuantity());
+            product.setId(monitor.getId());
+        }
+
         product.setLocalBrand(monitor.getLocalBrand());
         iProductService.save(product);
         return new ResponseEntity<>(product,HttpStatus.CREATED);
     }
+    @PreAuthorize("hasAnyRole('EMPLOYEE','ADMIN')")
     @PostMapping("/Mouse")
     public ResponseEntity<?> createMouse(@Valid @RequestBody Mouse mouse, BindingResult bindingResult) {
         System.out.println(mouse);
@@ -156,10 +183,16 @@ public class ProductController {
             return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_GATEWAY);
         }
         Product product = new Product(mouse.getId(),mouse.getName(),mouse.getPrice(), mouse.getOldPrice(), mouse.getImage(),mouse.getConnect(),mouse.getReliability(), mouse.getCompatible(), mouse.getSensor(), mouse.getDpi(),mouse.getWeight(),mouse.getOs(), mouse.getCategory());
+        if (mouse.getId() != null) {
+            Product product2 = iProductService.findById(mouse.getId());
+            product.setQuantity(product2.getQuantity());
+            product.setId(mouse.getId());
+        }
         product.setLocalBrand(mouse.getLocalBrand());
         iProductService.save(product);
         return new ResponseEntity<>(product,HttpStatus.CREATED);
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable("id") int id) {
        Product product = iProductService.findById(id);

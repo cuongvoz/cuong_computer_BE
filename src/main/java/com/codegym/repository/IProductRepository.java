@@ -18,6 +18,8 @@ public interface IProductRepository extends JpaRepository<Product, Integer> {
     @Query(value = " select p.*  from `product` p join `buy_history` bh on p.id = bh.product_id where p.is_delete = false  group by p.id order by sum(p.id) desc", nativeQuery = true)
     Page<Product> hotProduct(Pageable pageable);
 
+    boolean existsById(Integer id);
+
     @Query(value = "select * from product where category_id = :id and is_delete =false order by price ,id desc", nativeQuery = true)
     Page<Product> findByCategory(Pageable pageable, @Param("id") int id);
 

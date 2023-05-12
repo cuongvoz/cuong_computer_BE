@@ -9,15 +9,15 @@ import java.util.Objects;
 import java.util.Set;
 
 public class SignUpForm {
-    @NotBlank(message = "Tên không được để trống")
+    @NotBlank(message = "Hãy nhập họ và tên.")
     private String name;
-    @NotBlank(message = "Vui lòng nhập tên đăng nhập")
+    @NotBlank(message = "Hãy nhập tên đăng nhập.")
     private String username;
-    @NotBlank(message = "Vui lòng nhập email")
+    @NotBlank(message = "Hãy nhập email.")
     private String email;
-    @NotBlank(message = "Vui lòng nhập mật khẩu")
+    @NotBlank(message = "Hãy nhập mật khẩu.")
     private String password;
-    @NotBlank(message = "Vui lòng nhập mật khẩu xác nhận")
+    @NotBlank(message = "Hãy nhập mật khẩu xác nhận.")
     private String confirmPassword;
     private Set<String> roles;
 
@@ -34,14 +34,14 @@ public class SignUpForm {
     public void validate(List<User> list, SignUpForm signInForm, Errors errors){
         for (User user : list) {
             if (Objects.equals(user.getUsername(), signInForm.getUsername())) {
-                errors.rejectValue("username", "username", "Tên đăng nhập " + signInForm.getUsername() + " đã được sử dụng");
+                errors.rejectValue("username", "username", "Tên đăng nhập đã tồn tại");
             }
             if (Objects.equals(user.getEmail(), signInForm.getEmail())) {
-                errors.rejectValue("email", "email", "Email " + signInForm.getEmail() + " đã được sử dụng");
+                errors.rejectValue("email", "email", "Email đã được sử dụng");
             }
         }
         if (!Objects.equals(signInForm.getPassword(), signInForm.getConfirmPassword())) {
-            errors.rejectValue("confirmPassword", "confirmPassword", "Mật khẩu xác nhận không trùng khớp ");
+            errors.rejectValue("confirmPassword", "confirmPassword", "Mật khẩu xác nhận sai ");
 
         }
     }

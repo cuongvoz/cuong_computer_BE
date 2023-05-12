@@ -21,6 +21,6 @@ public interface IProductService {
     Page<Product> findAllByIsDeleteFalseAndPriceBetweenAndCategory_Id(Double price, Double price2, Integer category_id, Pageable pageable);
     Page<Product> findAllByBrandAndCategory(List<Integer> brand,int category ,Pageable pageable);
     Page<Product> findAllByBrand(List<Integer> brand,Pageable pageable);
-
+    boolean existsById(Integer id);
     Page<Product> findAllByIsDeleteFalseAndCpuAndCategory_Id(String[] cpu, Integer category_id, Pageable pageable);
 }
