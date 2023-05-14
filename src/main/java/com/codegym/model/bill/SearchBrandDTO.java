@@ -11,6 +11,9 @@ public class SearchBrandDTO {
         this.brand = brand;
     }
 
+    public SearchBrandDTO() {
+    }
+
     public int getId() {
         return id;
     }
