@@ -6,12 +6,8 @@ import javax.validation.constraints.Size;
 
 public class SignInForm {
     @NotBlank(message = "Vui lòng nhập tên đăng nhập.")
-    @Pattern(regexp = "^[a-zA-Z0-9]+$",message = "Tên đăng nhập không đúng định dạng.")
-    @Size(min = 3,max = 10,message = "Tên đăng nhập không đúng định dạng.")
     private String username;
     @NotBlank(message = "Vui lòng nhập mật khẩu.")
-    @Pattern(regexp = "^[a-zA-Z0-9]+$",message = "Mật khẩu không đúng định dạng.")
-    @Size(min = 3,max = 10, message = "Mật khẩu không đúng định dạng.")
     private String password;
 
     public SignInForm() {
