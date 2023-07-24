@@ -46,6 +46,7 @@ public class Product {
     private String os;
     private String screenSize;
     private String resolution;
+    private String Switch;
     private String scanFrequency;
     private String aspectRatio;
     private String connector;
@@ -206,6 +207,14 @@ public class Product {
 
     public String getKeyboard() {
         return keyboard;
+    }
+
+    public String getSwitch() {
+        return Switch;
+    }
+
+    public void setSwitch(String aSwitch) {
+        Switch = aSwitch;
     }
 
     public void setKeyboard(String keyboard) {
