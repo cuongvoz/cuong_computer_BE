@@ -29,8 +29,6 @@ public class ProductController {
     @Autowired  
     private IProductService iProductService;
 
-    @Autowired
-    private ICategoryService iCategoryService;
     @GetMapping("/detail/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable("id") int id) {
         return new ResponseEntity<>(iProductService.findById(id),HttpStatus.OK);
@@ -124,7 +122,6 @@ public class ProductController {
     @PreAuthorize("hasAnyRole('EMPLOYEE','ADMIN')")
     @PostMapping("/Keyboard")
     public ResponseEntity<?> createKeyboard(@Valid @RequestBody Keyboard keyboard, BindingResult bindingResult) {
-
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getFieldErrors(),HttpStatus.BAD_GATEWAY);
         }
